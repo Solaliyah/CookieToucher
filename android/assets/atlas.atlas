@@ -1,0 +1,32 @@
+Atlas.png
+fomat:RGBA8888
+filter:Nearest,Nearest
+repeat:none
+0001
+ roteta:false
+ xy:0,0
+ size:512,128
+ orig:512,128
+ offset:0,0
+ index:-1
+0002
+ roteta:false
+ xy:0,128
+ size:512,128
+ orig:512,128
+ offset:0,0
+ index:-1
+0003
+ roteta:false
+ xy:0,256
+ size:512,128
+ orig:512,128
+ offset:0,0
+ index:-1
+0004
+ roteta:false
+ xy:0,374
+ size:512,128
+ orig:512,128
+ offset:0,0
+ index:-1
