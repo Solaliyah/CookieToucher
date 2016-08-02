@@ -41,8 +41,8 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 	private float elapsedTime = 0;
 	private Sprite button;
 	private Vector3 touchPoint;
-	public static int LOGICAL_WIDTH = 720;
-	public static int LOGICAL_HEIGHT = 1280;
+	public static int LOGICAL_WIDTH = 1080;
+	public static int LOGICAL_HEIGHT = 1920;
 	Stage stage;
 	private OrthographicCamera camera;
 	private FPSLogger fpsLogger = null;
@@ -77,6 +77,9 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 		public boolean started = false;
 
 		public UIFrameActor(int x,int y){
+			setX(x);
+			setY(y);
+			Gdx.app.log(String.valueOf(getX()), String.valueOf(getY()));
 			setBounds(x, y, ButtonFrame.getWidth(), ButtonFrame.getHeight());
 			addListener(new InputListener(){
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
@@ -99,9 +102,9 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 		@Override
 		public void act(float delta){
 			if(started){
-				setX(120);
+				setY(LOGICAL_HEIGHT - 128 - 64);
 			}else{
-				setX(720 - 128 + 40);
+				setX(0);
 			}
 		}
 	}
@@ -144,27 +147,27 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 			stage.addActor(uIGroup);
 
 			{
-				UIFrameActor uiFrameActor1 = new UIFrameActor(720 - 128 + 40, 1280 - 128 - 30);
+				UIFrameActor uiFrameActor1 = new UIFrameActor(LOGICAL_WIDTH, 1280 + 128);
 				uiFrameActor1.setTouchable(Touchable.enabled);
 				uIGroup.addActor(uiFrameActor1);
 			}
 			{
-				UIFrameActor uiFrameActor2 = new UIFrameActor(720 - 128 + 40, 1280 - 128 * 2 - 30);
+				UIFrameActor uiFrameActor2 = new UIFrameActor(LOGICAL_WIDTH - 128, 1280 - 128 * 2 - 30);
 				uiFrameActor2.setTouchable(Touchable.enabled);
 				uIGroup.addActor(uiFrameActor2);
 			}
 			{
-				UIFrameActor uiFrameActor3 = new UIFrameActor(720 - 128 + 40, 1280 - 128 * 3 - 30);
+				UIFrameActor uiFrameActor3 = new UIFrameActor(LOGICAL_WIDTH - 128, 1280 - 128 * 3 - 30);
 				uiFrameActor3.setTouchable(Touchable.enabled);
 				uIGroup.addActor(uiFrameActor3);
 			}
 			{
-				UIFrameActor uiFrameActor4 = new UIFrameActor(720 - 128 + 40, 1280 - 128 * 4 - 30);
+				UIFrameActor uiFrameActor4 = new UIFrameActor(LOGICAL_WIDTH - 128 + 40, 1280 - 128 * 4 - 30);
 				uiFrameActor4.setTouchable(Touchable.enabled);
 				uIGroup.addActor(uiFrameActor4);
 			}
 			{
-				UIFrameActor uiFrameActor5 = new UIFrameActor(720 - 128 + 40, 1280 - 128 * 5 - 30);
+				UIFrameActor uiFrameActor5 = new UIFrameActor(LOGICAL_WIDTH - 128 + 40, 1280 - 128 * 5 - 30);
 				uiFrameActor5.setTouchable(Touchable.enabled);
 				uIGroup.addActor(uiFrameActor5);
 			}
