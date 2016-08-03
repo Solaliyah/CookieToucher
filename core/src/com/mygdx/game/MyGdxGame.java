@@ -76,18 +76,19 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 	public class UIFrameActor extends Actor{
 		Texture ButtonFrame = new Texture("Button.png");
 		public boolean started = true;
+		int menuNum;
 
-		public UIFrameActor(int x,int y){
-			setX(x);
-			setY(y);
+		public UIFrameActor(){
+			menuNum = 5;
+			setX(LOGICAL_WIDTH - 128);
+			setY(LOGICAL_HEIGHT - 128 * menuNum);
 			Gdx.app.log(String.valueOf(getX()), String.valueOf(getY()));
-			setBounds(x, y, ButtonFrame.getWidth(), ButtonFrame.getHeight());
+			setBounds(getX(), getY() - 128 * (5 - menuNum), ButtonFrame.getWidth(), ButtonFrame.getHeight() * menuNum);
 			addListener(new InputListener(){
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
-					if(started == false)
-						started = true;
-					else
-						started = false;
+					menuNum--;
+					if(menuNum == 0)
+						menuNum = 5;
 					return true;
 				}
 
@@ -96,17 +97,13 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 
 		@Override
 		public void draw(Batch batch, float alpha){
-			batch.draw(ButtonFrame, getX(), getY());
+			for(int menuNum_i = 0;menuNum_i < menuNum; menuNum_i++)
+				batch.draw(ButtonFrame, getX(), getY() + 128 * menuNum_i);
 		}
 
 		@Override
 		public void act(float delta){
 			super.act(delta);
-			if(started){
-				setX(LOGICAL_WIDTH - 128);
-			}else{
-				setX(0);
-			}
 		}
 	}
 
@@ -150,29 +147,9 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 			stage.addActor(uIGroup);
 
 			{
-				UIFrameActor uiFrameActor1 = new UIFrameActor(LOGICAL_WIDTH - 128, LOGICAL_HEIGHT - 128);
+				UIFrameActor uiFrameActor1 = new UIFrameActor();
 				uiFrameActor1.setTouchable(Touchable.enabled);
 				uIGroup.addActor(uiFrameActor1);
-			}
-			{
-				UIFrameActor uiFrameActor2 = new UIFrameActor(LOGICAL_WIDTH - 128, LOGICAL_HEIGHT - 128 * 2);
-				uiFrameActor2.setTouchable(Touchable.enabled);
-				uIGroup.addActor(uiFrameActor2);
-			}
-			{
-				UIFrameActor uiFrameActor3 = new UIFrameActor(LOGICAL_WIDTH - 128, LOGICAL_HEIGHT - 128 * 3);
-				uiFrameActor3.setTouchable(Touchable.enabled);
-				uIGroup.addActor(uiFrameActor3);
-			}
-			{
-				UIFrameActor uiFrameActor4 = new UIFrameActor(LOGICAL_WIDTH - 128, LOGICAL_HEIGHT - 128 * 4);
-				uiFrameActor4.setTouchable(Touchable.enabled);
-				uIGroup.addActor(uiFrameActor4);
-			}
-			{
-				UIFrameActor uiFrameActor5 = new UIFrameActor(LOGICAL_WIDTH - 128, LOGICAL_HEIGHT - 128 * 5);
-				uiFrameActor5.setTouchable(Touchable.enabled);
-				uIGroup.addActor(uiFrameActor5);
 			}
 		}
 	}
