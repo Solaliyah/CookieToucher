@@ -18,35 +18,46 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RotateToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class MyGdxGame extends ApplicationAdapter implements ApplicationListener, GestureDetector.GestureListener {
 	SpriteBatch batch;
 	Texture sakuramochi;
-	private BitmapFont font;
 	ShapeRenderer shapeRenderer;
 	private TextureAtlas textureAtlas;
-	private Animation animation;
 	private float elapsedTime = 0;
 	private Sprite button;
 	private Vector3 touchPoint;
-	public static int LOGICAL_WIDTH = 1080;
-	public static int LOGICAL_HEIGHT = 1920;
+	public static int LOGICAL_WIDTH = 720;
+	public static int LOGICAL_HEIGHT = 1280;
 	Stage stage;
-	private OrthographicCamera camera;
 	private FPSLogger fpsLogger = null;
-	ArrayList<String> actorNum;
+	Vector2 touchVector;
+	long chash;
+	BitmapFont font;
+
+
 	public class sakuramochiActor extends Actor{
 		Texture texture = new Texture("sakuramochi.png");
 		double actorTheta = 0;
@@ -54,7 +65,7 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 
 		public sakuramochiActor(float x,float y){
 			setX(x);
-			setY(y + 128);
+			setY(y);
 		}
 
 		@Override
@@ -77,9 +88,6 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 		public boolean started = false;
 
 		public UIFrameActor(int x,int y){
-			setX(x);
-			setY(y);
-			Gdx.app.log(String.valueOf(getX()), String.valueOf(getY()));
 			setBounds(x, y, ButtonFrame.getWidth(), ButtonFrame.getHeight());
 			addListener(new InputListener(){
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
@@ -102,12 +110,64 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 		@Override
 		public void act(float delta){
 			if(started){
-				setY(LOGICAL_HEIGHT - 128 - 64);
-			}else{
 				setX(0);
+			}else{
+				setX(LOGICAL_WIDTH - ButtonFrame.getWidth());
 			}
 		}
 	}
+
+	public class CookeiActor extends Actor{
+		Texture cookey = new Texture("sakuramochi.png");
+		public CookeiActor(int x,int y){
+			setX(x);
+			setY(y);
+			setBounds(getX(), getY(), cookey.getWidth(), cookey.getHeight());
+			addListener(new InputListener(){
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
+					chash++;
+					sakuramochiActor sakuramochiActor = new sakuramochiActor(MathUtils.random(LOGICAL_WIDTH), MathUtils.random(LOGICAL_HEIGHT));
+					sakuramochiActor.setTouchable(Touchable.enabled);
+					stage.addActor(sakuramochiActor);
+					return true;
+				}
+
+			});
+		}
+
+		@Override
+		public void draw(Batch batch, float alpha){
+			batch.draw(cookey, this.getX(), this.getY());
+		}
+
+		@Override
+		public void act(float delta){
+			for(Iterator<Action> iter = this.getActions().iterator(); iter.hasNext();){
+				iter.next().act(delta);
+			}
+		}
+	}
+
+	public class BackGroundActor extends Actor{
+		Texture ButtonFrame = new Texture("BackGround.jpeg");
+		public boolean started = false;
+
+		public BackGroundActor(){
+			setX(0);
+			setY(0);
+		}
+
+		@Override
+		public void draw(Batch batch, float alpha){
+			batch.draw(ButtonFrame, getX(), getY());
+		}
+
+		@Override
+		public void act(float delta){
+
+		}
+	}
+
 
 	@Override
 	public void create () {
@@ -115,25 +175,25 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
 		font.setColor(Color.BLUE);
+		font.getData().setScale(12);
 		sakuramochi = new Texture("sakuramochi.png");
+		touchVector = new Vector2();
+		stage = new Stage(new FitViewport(LOGICAL_WIDTH, LOGICAL_HEIGHT));
+		Matrix4 cameraMatrix = stage.getViewport().getCamera().combined;
+		batch.setProjectionMatrix(cameraMatrix);
+		shapeRenderer.setProjectionMatrix(cameraMatrix);
 
-		actorNum = new ArrayList<String>();
-		stage = new Stage();
+		chash = 0;
 
-		sakuramochiActor sakuramochiActor = new sakuramochiActor(0, 0);
-		sakuramochiActor.setTouchable(Touchable.enabled);
-		actorNum.add("sakuramochiActor");
+		BackGroundActor backGroundActor = new BackGroundActor();
 
-		stage.addActor(sakuramochiActor);
-		camera = (OrthographicCamera) stage.getViewport().getCamera();
-		camera.setToOrtho(false, LOGICAL_WIDTH, LOGICAL_HEIGHT);
+		CookeiActor cookeiActor = new CookeiActor(256, 256);
 
-		textureAtlas = new TextureAtlas(Gdx.files.internal("atlas.atlas"));
-		animation = new Animation(1/4f, textureAtlas.getRegions());
+		stage.addActor(backGroundActor);
+		stage.addActor(cookeiActor);
+
+
 		fpsLogger = new FPSLogger();
-		Image image = new Image(sakuramochi);
-		image.setPosition(0, 0);
-		stage.addActor(image);
 
 		InputMultiplexer multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(stage);
@@ -147,27 +207,27 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 			stage.addActor(uIGroup);
 
 			{
-				UIFrameActor uiFrameActor1 = new UIFrameActor(LOGICAL_WIDTH, 1280 + 128);
+				UIFrameActor uiFrameActor1 = new UIFrameActor(720 - 128 + 40, 1280 - 128 - 30);
 				uiFrameActor1.setTouchable(Touchable.enabled);
 				uIGroup.addActor(uiFrameActor1);
 			}
 			{
-				UIFrameActor uiFrameActor2 = new UIFrameActor(LOGICAL_WIDTH - 128, 1280 - 128 * 2 - 30);
+				UIFrameActor uiFrameActor2 = new UIFrameActor(720 - 128 + 40, 1280 - 128 * 2 - 30);
 				uiFrameActor2.setTouchable(Touchable.enabled);
 				uIGroup.addActor(uiFrameActor2);
 			}
 			{
-				UIFrameActor uiFrameActor3 = new UIFrameActor(LOGICAL_WIDTH - 128, 1280 - 128 * 3 - 30);
+				UIFrameActor uiFrameActor3 = new UIFrameActor(720 - 128 + 40, 1280 - 128 * 3 - 30);
 				uiFrameActor3.setTouchable(Touchable.enabled);
 				uIGroup.addActor(uiFrameActor3);
 			}
 			{
-				UIFrameActor uiFrameActor4 = new UIFrameActor(LOGICAL_WIDTH - 128 + 40, 1280 - 128 * 4 - 30);
+				UIFrameActor uiFrameActor4 = new UIFrameActor(720 - 128 + 40, 1280 - 128 * 4 - 30);
 				uiFrameActor4.setTouchable(Touchable.enabled);
 				uIGroup.addActor(uiFrameActor4);
 			}
 			{
-				UIFrameActor uiFrameActor5 = new UIFrameActor(LOGICAL_WIDTH - 128 + 40, 1280 - 128 * 5 - 30);
+				UIFrameActor uiFrameActor5 = new UIFrameActor(720 - 128 + 40, 1280 - 128 * 5 - 30);
 				uiFrameActor5.setTouchable(Touchable.enabled);
 				uIGroup.addActor(uiFrameActor5);
 			}
@@ -177,7 +237,6 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 	@Override
 	public void resize(int width, int height){
 		stage.getViewport().update(width, height);
-		camera.update();
 	}
 
 	@Override
@@ -186,8 +245,11 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
+		batch.begin();
+		font.draw(batch, String.valueOf(chash) , 0, LOGICAL_HEIGHT);
+		batch.end();
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();
@@ -199,7 +261,11 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 
 	@Override
 	public boolean touchDown(float x, float y, int pointer, int button) {
-		Gdx.app.log("Touch", "touchDown");
+		stage.getViewport().unproject(touchVector.set(x, y));
+		Gdx.app.log("Touch", "touchDown" + String.valueOf(touchVector.x));
+		sakuramochiActor sakuramochiActor = new sakuramochiActor(touchVector.x, touchVector.y);
+		sakuramochiActor.setTouchable(Touchable.enabled);
+		stage.addActor(sakuramochiActor);
 		return false;
 	}
 
@@ -223,8 +289,6 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 
 	@Override
 	public boolean pan(float x, float y, float deltaX, float deltaY) {
-		stage.getActors().get(actorNum.indexOf("sakuramochiActor")).setX(stage.getActors().get(actorNum.indexOf("sakuramochiActor")).getX() + deltaX);
-		stage.getActors().get(actorNum.indexOf("sakuramochiActor")).setY(stage.getActors().get(actorNum.indexOf("sakuramochiActor")).getY() - deltaY);
 		Gdx.app.log("Touch", "pan");
 
 		return false;
