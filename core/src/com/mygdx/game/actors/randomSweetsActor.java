@@ -10,12 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 /**
  * Created by SolarisD on 2016/08/03.
  */
-public class randomSweetsActor extends Actor {
+public class RandomSweetsActor extends Actor {
         float actorTheta = 0;
         float plusTheta;
         int r;
         Sprite spriteTexture;
-        public randomSweetsActor(int LOGICAL_WIDTH, int LOGICAL_HEIGHT){
+        public RandomSweetsActor(int LOGICAL_WIDTH, int LOGICAL_HEIGHT){
             generateTexture();
             spriteTexture.setPosition(MathUtils.random(LOGICAL_WIDTH), MathUtils.random(LOGICAL_HEIGHT));
             spriteTexture.scale((float)(MathUtils.random(10) * 0.1));
@@ -25,9 +25,8 @@ public class randomSweetsActor extends Actor {
         }
 
         void generateTexture() {
-            switch (MathUtils.random(7 - 1)) {
+            switch (MathUtils.random(7)) {
                 case 0:
-                    Gdx.app.log("default","NOT");
                     spriteTexture = new Sprite(new Texture("sweets_annindoufu.png"));
                     break;
                 case 1:
