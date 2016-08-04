@@ -26,8 +26,10 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.actors.RandomSweetsActor;
+import com.mygdx.game.actors.TouchedCookieActor;
 import com.mygdx.game.actors.UIButtonActor;
 
 public class MyGdxGame extends ApplicationAdapter implements ApplicationListener, GestureDetector.GestureListener {
@@ -35,64 +37,35 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 	Texture sakuramochi;
 	private BitmapFont font;
 	ShapeRenderer shapeRenderer;
-	private TextureAtlas textureAtlas;
-	private Animation animation;
-	private float elapsedTime = 0;
-	private Sprite button;
-	Sprite sprite;
-	private Vector3 touchPoint;
 	Stage stage;
 	private OrthographicCamera camera;
 	private FPSLogger fpsLogger = null;
-	public class sakuramochiActor extends Actor{
-		double actorTheta = 0;
-		int r = 128;
-		Sprite sakuramochiSprite = new Sprite(new Texture("sakuramochi.png"));
-		public sakuramochiActor(float x,float y){
-			sakuramochiSprite.setPosition(x, y);
-		}
-
-		@Override
-		public void draw(Batch batch, float alpha){
-			sakuramochiSprite.draw(batch);
-		}
-
-		@Override
-		public void act(float delta){
-			actorTheta += 0.1;
-			sakuramochiSprite.rotate(-10.0f);
-			sakuramochiSprite.setX(sakuramochiSprite.getX() + ((float)Math.sin(actorTheta) - (float)Math.sin(actorTheta - 0.1)) * r);
-			sakuramochiSprite.setY(sakuramochiSprite.getY() +((float)Math.cos(actorTheta) - (float)Math.cos(actorTheta - 0.1)) * r);
-		}
-	}
-
+	Setting setting;
+	TouchedCookieActor touchedCookieActor;
+	Array<String> actorArray;
 
 	@Override
 	public void create () {
+		actorArray = new Array<String>();
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
 		font.setColor(Color.BLUE);
+		font.getData().setScale(2);
+		setting = new Setting();
 		sakuramochi = new Texture("sakuramochi.png");
 
-		sprite = new Sprite(sakuramochi);
-		sprite.setRotation(45f);
 
 		stage = new Stage(new FitViewport(Setting.LOGICAL_WIDTH, Setting.LOGICAL_HEIGHT));
 		Matrix4 cameraMatrix = stage.getViewport().getCamera().combined;
 		batch.setProjectionMatrix(cameraMatrix);
 		shapeRenderer.setProjectionMatrix(cameraMatrix);
 
-		sakuramochiActor sakuramochiActor = new sakuramochiActor(256, 256);
-		sakuramochiActor.setTouchable(Touchable.enabled);
+		touchedCookieActor = new TouchedCookieActor();
 
-		Action action = Actions.rotateBy(600, 10 );
-		sakuramochiActor.addAction(action);
+		stage.addActor(touchedCookieActor);
+		actorArray.add("touchedCookieActor");
 
-		stage.addActor(sakuramochiActor);
-
-		textureAtlas = new TextureAtlas(Gdx.files.internal("atlas.atlas"));
-		animation = new Animation(1/4f, textureAtlas.getRegions());
 		fpsLogger = new FPSLogger();
 
 		InputMultiplexer multiplexer = new InputMultiplexer();
@@ -105,7 +78,7 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 
 			uIGroup.setPosition(0, 0);
 			stage.addActor(uIGroup);
-
+			actorArray.add("uIGroup");
 			{
 				UIButtonActor uiFrameActor = new UIButtonActor();
 				uiFrameActor.setTouchable(Touchable.enabled);
@@ -126,7 +99,7 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 		batch.begin();
-		sprite.draw(batch, 1);
+		font.draw(batch, String.valueOf(setting.getChash()), 0, Setting.LOGICAL_HEIGHT - 32);
 		batch.end();
 	}
 	
@@ -136,15 +109,18 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 		font.dispose();
 		sakuramochi.dispose();
 		shapeRenderer.dispose();
-		textureAtlas.dispose();
 	}
 
 	@Override
 	public boolean touchDown(float x, float y, int pointer, int button) {
 		Gdx.app.log("Touch", "touchDown");
-		RandomSweetsActor Actor = new RandomSweetsActor(Setting.LOGICAL_WIDTH - 128, Setting.LOGICAL_HEIGHT - 128);
-		Actor.setTouchable(Touchable.enabled);
-		stage.addActor(Actor);
+		RandomSweetsActor randomSweetsActor = new RandomSweetsActor(Setting.LOGICAL_WIDTH - 128, Setting.LOGICAL_HEIGHT - 128);
+		randomSweetsActor.setTouchable(Touchable.enabled);
+		stage.addActor(randomSweetsActor);
+		actorArray.add("randomSweetsActor");
+
+		stage.getActors().get(0).remove();
+
 		return false;
 	}
 
