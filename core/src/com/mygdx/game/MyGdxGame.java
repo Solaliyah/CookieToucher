@@ -119,8 +119,6 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 		stage.addActor(randomSweetsActor);
 		actorArray.add("randomSweetsActor");
 
-		stage.getActors().get(0).remove();
-
 		return false;
 	}
 

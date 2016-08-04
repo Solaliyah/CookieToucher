@@ -13,7 +13,7 @@ import com.mygdx.game.Setting;
  * Created by SolarisD on 2016/08/04.
  */
 public class TouchedCookieActor extends Actor{
-    Texture cookie = new Texture("sakuramochi.png");
+    Texture cookie = new Texture("sweets_cookie.png");
     // TODO Soundのdispose処理
     Sound sound = Gdx.audio.newSound(Gdx.files.internal("click.ogg"));
     Setting setting;
