@@ -1,4 +1,4 @@
-package com.mygdx.game.actors;
+package com.mygdx.cookietoucher.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.mygdx.game.Setting;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.mygdx.cookietoucher.Setting;
 
 /**
  * Created by SolarisD on 2016/08/04.
@@ -17,16 +18,17 @@ public class UIButtonActor extends Actor{
     // TODO Soundのdispose処理
     Sound sound = Gdx.audio.newSound(Gdx.files.internal("click.ogg"));
     int menuNum;
+    Stage stage;
 
-
-    public UIButtonActor(){
+    public UIButtonActor(Stage stage){
+        this.stage = stage;
         menuNum = 5;
         setX(Setting.LOGICAL_WIDTH - 128);
         setY(Setting.LOGICAL_HEIGHT - 128 * menuNum);
-        Gdx.app.log(String.valueOf(getX()), String.valueOf(getY()));
         setBounds(getX(), getY() - 128 * (5 - menuNum), ButtonFrame.getWidth(), ButtonFrame.getHeight() * menuNum);
         addListener(new InputListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
+                //  TODO stage.getActor()でここでRandomSweetsActorを消したい
                 sound.play();
                 menuNum--;
                 if(menuNum == 0)

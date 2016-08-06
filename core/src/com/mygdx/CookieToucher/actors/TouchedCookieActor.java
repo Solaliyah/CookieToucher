@@ -1,4 +1,4 @@
-package com.mygdx.game.actors;
+package com.mygdx.cookietoucher.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.mygdx.game.Setting;
+import com.mygdx.cookietoucher.Setting;
 
 /**
  * Created by SolarisD on 2016/08/04.

@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.cookietoucher;
 
 /**
  * Created by SolarisD on 2016/08/04.

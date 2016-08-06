@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.cookietoucher;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.ApplicationListener;
@@ -9,28 +9,20 @@ import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.game.actors.RandomSweetsActor;
-import com.mygdx.game.actors.TouchedCookieActor;
-import com.mygdx.game.actors.UIButtonActor;
+import com.mygdx.cookietoucher.actors.RandomSweetsActor;
+import com.mygdx.cookietoucher.actors.TouchedCookieActor;
+import com.mygdx.cookietoucher.actors.UIButtonActor;
 
 public class MyGdxGame extends ApplicationAdapter implements ApplicationListener, GestureDetector.GestureListener {
 	SpriteBatch batch;
@@ -54,7 +46,6 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 		font.getData().setScale(2);
 		setting = new Setting();
 		sakuramochi = new Texture("sakuramochi.png");
-
 
 		stage = new Stage(new FitViewport(Setting.LOGICAL_WIDTH, Setting.LOGICAL_HEIGHT));
 		Matrix4 cameraMatrix = stage.getViewport().getCamera().combined;
@@ -80,7 +71,7 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 			stage.addActor(uIGroup);
 			actorArray.add("uIGroup");
 			{
-				UIButtonActor uiFrameActor = new UIButtonActor();
+				UIButtonActor uiFrameActor = new UIButtonActor(stage);
 				uiFrameActor.setTouchable(Touchable.enabled);
 				uIGroup.addActor(uiFrameActor);
 			}
