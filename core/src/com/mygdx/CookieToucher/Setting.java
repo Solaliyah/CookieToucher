@@ -12,7 +12,6 @@ public class Setting {
     //　スコアの値
     private static long chash = 0;
 
-
     public boolean getIsSoundEnable(){
         return isSoundEnabled;
     }

@@ -29,6 +29,7 @@ public class UIButtonActor extends Actor{
         addListener(new InputListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
                 //  TODO stage.getActor()でここでRandomSweetsActorを消したい
+
                 sound.play();
                 menuNum--;
                 if(menuNum == 0)
