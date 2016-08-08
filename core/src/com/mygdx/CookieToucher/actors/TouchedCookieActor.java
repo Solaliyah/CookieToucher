@@ -24,8 +24,6 @@ public class TouchedCookieActor extends Actor{
         setY(Setting.LOGICAL_HEIGHT - 512);
 
         setting = new Setting();
-
-        Gdx.app.log(String.valueOf(getX()), String.valueOf(getY()));
         setBounds(getX(), getY(), cookie.getWidth(), cookie.getHeight());
         addListener(new InputListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){

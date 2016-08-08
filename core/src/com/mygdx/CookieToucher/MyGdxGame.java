@@ -35,7 +35,7 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 	Setting setting;
 	TouchedCookieActor touchedCookieActor;
 	Array<String> actorArray;
-
+	Sidebar sidebar;
 	@Override
 	public void create () {
 		actorArray = new Array<String>();
@@ -104,7 +104,7 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 
 	@Override
 	public boolean touchDown(float x, float y, int pointer, int button) {
-		Gdx.app.log("Touch", "touchDown");
+		Gdx.app.log("Touch", "touchDown" + String.valueOf(x) + " : " + String.valueOf(y));
 		RandomSweetsActor randomSweetsActor = new RandomSweetsActor(Setting.LOGICAL_WIDTH - 128, Setting.LOGICAL_HEIGHT - 128);
 		randomSweetsActor.setTouchable(Touchable.enabled);
 		stage.addActor(randomSweetsActor);

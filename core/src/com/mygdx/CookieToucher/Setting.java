@@ -11,6 +11,13 @@ public class Setting {
     private static boolean isSoundEnabled = true;
     //　スコアの値
     private static long chash = 0;
+    //　購入したItem TODO アイテムは６４個まで
+    static boolean  boughtItem[] = new boolean[64];
+    ScoreCalculate scoreCalculate;
+
+    public Setting(){
+        scoreCalculate = new ScoreCalculate();
+    }
 
     public boolean getIsSoundEnable(){
         return isSoundEnabled;
@@ -22,12 +29,13 @@ public class Setting {
     public long getChash(){
         return chash;
     }
-    public void setChash(long chash){
+
+    public void setChashDebug(long chash){
         this.chash = chash;
     }
 
-    public void addChash(long chash){
-        this.chash += chash;
+    public void addChash(long addChash){
+        this.chash += scoreCalculate.AddChashCalculate( addChash);
     }
 
     public void subChash(long chash){
