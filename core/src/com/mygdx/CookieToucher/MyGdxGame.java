@@ -45,6 +45,7 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 		font.setColor(Color.BLUE);
 		font.getData().setScale(2);
 		setting = new Setting();
+		setting.iniItemList();
 		sakuramochi = new Texture("sakuramochi.png");
 
 		stage = new Stage(new FitViewport(Setting.LOGICAL_WIDTH, Setting.LOGICAL_HEIGHT));
@@ -105,10 +106,6 @@ public class MyGdxGame extends ApplicationAdapter implements ApplicationListener
 	@Override
 	public boolean touchDown(float x, float y, int pointer, int button) {
 		Gdx.app.log("Touch", "touchDown" + String.valueOf(x) + " : " + String.valueOf(y));
-		RandomSweetsActor randomSweetsActor = new RandomSweetsActor(Setting.LOGICAL_WIDTH - 128, Setting.LOGICAL_HEIGHT - 128);
-		randomSweetsActor.setTouchable(Touchable.enabled);
-		stage.addActor(randomSweetsActor);
-		actorArray.add("randomSweetsActor");
 
 		return false;
 	}

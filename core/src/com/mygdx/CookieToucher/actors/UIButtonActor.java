@@ -23,6 +23,7 @@ public class UIButtonActor extends Actor{
     // TODO Soundのdispose処理
     Sound sound = Gdx.audio.newSound(Gdx.files.internal("click.ogg"));
     int menuNum;
+    int menuPageNum;
     Stage stage;
     Sidebar sidebar;
     BitmapFont font;
@@ -31,6 +32,7 @@ public class UIButtonActor extends Actor{
     public UIButtonActor(Stage stage){
         this.stage = stage;
         menuNum = 1;
+        menuPageNum = 1;
         font = new BitmapFont();
         font.getData().setScale(3);
         sidebar = new Sidebar(stage);
@@ -52,6 +54,7 @@ public class UIButtonActor extends Actor{
                 sound.play();
                 menuNum = sidebar.Updata((int) (((Setting.LOGICAL_HEIGHT - (getY() + y)) / 128)));
                 setBounds(getX(), Setting.LOGICAL_HEIGHT - 128 * menuNum, 128, 128 * menuNum);
+                Gdx.app.log("touchUp",String.valueOf(menuNum));
             }
         });
     }
@@ -66,16 +69,40 @@ public class UIButtonActor extends Actor{
         for(int menuNum_i = 1;menuNum_i < menuNum; menuNum_i++)
             batch.draw(ButtonFrame, getX(), 128 * ( 9 - menuNum_i));
 
-        font.getData().setScale(2);
+
         switch (sidebar.getSidebarStates()){
             case 1:
+                font.getData().setScale(2);
                 font.draw(batch,"Menu",getX(), 128 * 10 - 64);
                 break;
             case 11:
+                font.getData().setScale(2);
                 font.draw(batch,"SHOP",getX(), 128 * 9 - 64);
                 font.draw(batch,"EQUIP",getX(), 128 * 8 - 64);
                 font.draw(batch,"SUPPORTER",getX(), 128 * 7 - 64);
                 font.draw(batch,"ACHIEVEMENT",getX(), 128 * 6 - 64);
+                break;
+            case 111:
+                font.getData().setScale(4);
+                font.draw(batch,"A",getX(), 128 * 9 - 64);
+                font.draw(batch,"B",getX(), 128 * 8 - 64);
+                font.draw(batch,"C",getX(), 128 * 7 - 64);
+                font.draw(batch,"D",getX(), 128 * 6 - 64);
+                font.draw(batch,"E",getX(), 128 * 5 - 64);
+                font.draw(batch,"F",getX(), 128 * 4 - 64);
+                font.draw(batch,"G",getX(), 128 * 3 - 64);
+                font.draw(batch,"H",getX(), 128 * 2 - 64);
+                break;
+            case 1119:
+                font.getData().setScale(4);
+                font.draw(batch,"I",getX(), 128 * 9 - 64);
+                font.draw(batch,"J",getX(), 128 * 8 - 64);
+                font.draw(batch,"K",getX(), 128 * 7 - 64);
+                font.draw(batch,"L",getX(), 128 * 6 - 64);
+                font.draw(batch,"M",getX(), 128 * 5 - 64);
+                font.draw(batch,"N",getX(), 128 * 4 - 64);
+                font.draw(batch,"O",getX(), 128 * 3 - 64);
+                font.draw(batch,"P",getX(), 128 * 2 - 64);
                 break;
             default:
                 break;
